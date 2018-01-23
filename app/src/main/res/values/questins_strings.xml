@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Вопросы</string>
+    <string name="question_text">Самый популярный овощь Беларуси - кортошка.</string>
+    <string name="true_button">Да</string>
+    <string name="false_button">Нет</string>
+    <string name="correct_answer">Правильно!</string>
+    <string name="incorrect_answer">Неправильно :-(</string>
+
+</resources>

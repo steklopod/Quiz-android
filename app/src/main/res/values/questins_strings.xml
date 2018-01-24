@@ -4,7 +4,8 @@
     <string name="false_button">Нет</string>
     <string name="correct_answer">Правильно!</string>
     <string name="incorrect_answer">Неправильно :-(</string>
-    <string name="next_button">След. вопрос</string>
+    <string name="next_button">Дальше</string>
+    <string name="prev_button">Назад</string>
 
     <string name="q_afraid">Питер пен был старше 13 лет?</string>
     <string name="q_bel">Президент Беларуси глуп?</string>

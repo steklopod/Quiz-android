@@ -1,9 +1,15 @@
 <resources>
     <string name="app_name">Вопросы</string>
-    <string name="question_text">Самый популярный овощь Беларуси - кортошка.</string>
     <string name="true_button">Да</string>
     <string name="false_button">Нет</string>
     <string name="correct_answer">Правильно!</string>
     <string name="incorrect_answer">Неправильно :-(</string>
+    <string name="next_button">След. вопрос</string>
+
+    <string name="q_afraid">Питер пен был старше 13 лет?</string>
+    <string name="q_bel">Президент Беларуси глуп?</string>
+    <string name="q_duma">Дюма был французким писателем?</string>
+    <string name="q_riv">У Дона больше 20 притоков?</string>
+
 
 </resources>

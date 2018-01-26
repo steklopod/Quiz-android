@@ -9,11 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class QuizActivity extends AppCompatActivity {
-    private static Logger logger = LoggerFactory.getLogger(QuizActivity.class);
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -23,6 +19,9 @@ public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static int countOfRightAnswers = 0;
+    private int mCurrentIndex = 0;
+    private int countOfAnswer = 0;
 
     private Question[] mQuestions = new Question[]{
             new Question(R.string.q_afraid, false),
@@ -31,22 +30,20 @@ public class QuizActivity extends AppCompatActivity {
             new Question(R.string.q_riv, true)
     };
 
-    private int mCurrentIndex = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(Bundle) called");
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-            logger.info("mCurrentIndex = " + String.valueOf(mCurrentIndex));
+//            logger.info("mCurrentIndex = " + String.valueOf(mCurrentIndex));
+            countOfRightAnswers = savedInstanceState.getInt("countOfRightAnswers", 0);
+            countOfAnswer = savedInstanceState.getInt("countOfAnswer", 0);
         }
-
         setContentView(R.layout.activity_quiz);
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
         updateQuestion();
-
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,6 +90,8 @@ public class QuizActivity extends AppCompatActivity {
 
     private void nextQuestion() {
         mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
+        countOfAnswer++;
+        Log.i("nextQuestion", String.valueOf(countOfAnswer));
         updateQuestion();
     }
 
@@ -106,9 +105,23 @@ public class QuizActivity extends AppCompatActivity {
         int messageResId = 0;
         if (isAnswerTrue == userPressTrue) {
             messageResId = R.string.correct_answer;
+            countOfRightAnswers++;
+            Log.i("countOfRightAnswers", String.valueOf(countOfRightAnswers));
             nextQuestion();
         } else {
             messageResId = R.string.incorrect_answer;
+            nextQuestion();
+        }
+        if (countOfAnswer == mQuestions.length) {
+            int procentcOfRecognize = (int)(countOfRightAnswers * 100.0f / mQuestions.length);
+
+            Toast.makeText(this, "Процент правильных ответов: " + procentcOfRecognize + "%",
+                    Toast.LENGTH_SHORT).show();
+            countOfRightAnswers = 0;
+            countOfRightAnswers = 0;
+            countOfRightAnswers = 0;
+            nextQuestion();
+            return;
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
@@ -148,6 +161,8 @@ public class QuizActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "savedInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putInt("countOfRightAnswers", countOfRightAnswers);
+        savedInstanceState.putInt("countOfAnswer", countOfAnswer);
     }
 
     /**

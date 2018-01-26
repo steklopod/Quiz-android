@@ -35,8 +35,11 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(Bundle) called");
         if (savedInstanceState != null) {
+            Log.d("onCreate", "mCurrentIndex " + String.valueOf(mCurrentIndex));
+            Log.d("onCreate", "countOfRightAnswers " +String.valueOf(countOfRightAnswers));
+            Log.d("onCreate","countOfAnswer " + String.valueOf(countOfAnswer));
+
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-//            logger.info("mCurrentIndex = " + String.valueOf(mCurrentIndex));
             countOfRightAnswers = savedInstanceState.getInt("countOfRightAnswers", 0);
             countOfAnswer = savedInstanceState.getInt("countOfAnswer", 0);
         }
@@ -91,7 +94,7 @@ public class QuizActivity extends AppCompatActivity {
     private void nextQuestion() {
         mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
         countOfAnswer++;
-        Log.i("nextQuestion", String.valueOf(countOfAnswer));
+//        Log.i("nextQuestion", String.valueOf(countOfAnswer));
         updateQuestion();
     }
 
@@ -106,21 +109,21 @@ public class QuizActivity extends AppCompatActivity {
         if (isAnswerTrue == userPressTrue) {
             messageResId = R.string.correct_answer;
             countOfRightAnswers++;
-            Log.i("countOfRightAnswers", String.valueOf(countOfRightAnswers));
+//            Log.i("countOfRightAnswers", String.valueOf(countOfRightAnswers));
             nextQuestion();
         } else {
             messageResId = R.string.incorrect_answer;
             nextQuestion();
         }
         if (countOfAnswer == mQuestions.length) {
-            int procentcOfRecognize = (int)(countOfRightAnswers * 100.0f / mQuestions.length);
+            int procentcOfRecognize = (int) (countOfRightAnswers * 100.0f / mQuestions.length);
 
             Toast.makeText(this, "Процент правильных ответов: " + procentcOfRecognize + "%",
                     Toast.LENGTH_SHORT).show();
-            countOfRightAnswers = 0;
-            countOfRightAnswers = 0;
-            countOfRightAnswers = 0;
             nextQuestion();
+            countOfRightAnswers = 0;
+            mCurrentIndex = 0;
+            countOfAnswer = 0;
             return;
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();

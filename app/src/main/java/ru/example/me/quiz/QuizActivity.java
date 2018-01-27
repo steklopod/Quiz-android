@@ -1,5 +1,6 @@
 package ru.example.me.quiz;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,10 +10,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+/**
+ * 124 стр
+ */
 public class QuizActivity extends AppCompatActivity {
 
     private Button mTrueButton;
     private Button mFalseButton;
+    private Button mCheatButton;
     private ImageButton mNextButton;
     private ImageButton mPreviosButton;
     private TextView mQuestionTextView;
@@ -35,9 +41,10 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(Bundle) called");
         if (savedInstanceState != null) {
-            Log.d("onCreate", "mCurrentIndex " + String.valueOf(mCurrentIndex));
-            Log.d("onCreate", "countOfRightAnswers " +String.valueOf(countOfRightAnswers));
-            Log.d("onCreate","countOfAnswer " + String.valueOf(countOfAnswer));
+//            Log.d("onCreate", "mCurrentIndex " + String.valueOf(mCurrentIndex));
+//            Log.d("onCreate", "countOfRightAnswers " +String.valueOf(countOfRightAnswers));
+//            Log.d("onCreate","countOfAnswer " + String.valueOf(countOfAnswer));
+
 
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
             countOfRightAnswers = savedInstanceState.getInt("countOfRightAnswers", 0);
@@ -47,6 +54,7 @@ public class QuizActivity extends AppCompatActivity {
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
         updateQuestion();
+
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,6 +85,7 @@ public class QuizActivity extends AppCompatActivity {
                 nextQuestion();
             }
         });
+
         mPreviosButton = (ImageButton) findViewById(R.id.prev_button);
         mPreviosButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +95,21 @@ public class QuizActivity extends AppCompatActivity {
                 } else {
                     mCurrentIndex = mQuestions.length - 1;
                 }
+                countOfAnswer--;
                 updateQuestion();
+            }
+        });
+
+//      Новая активность - подсказка.
+        mCheatButton = (Button) findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//              Intent intent = new Intent(QuizActivity.this, CheatActivity.class);
+//              startActivity(intent);
+                boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
+                Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+                startActivity(intent);
             }
         });
     }
@@ -94,13 +117,13 @@ public class QuizActivity extends AppCompatActivity {
     private void nextQuestion() {
         mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
         countOfAnswer++;
-//        Log.i("nextQuestion", String.valueOf(countOfAnswer));
         updateQuestion();
     }
 
     private void updateQuestion() {
         int question = mQuestions[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
+//        Log.d(TAG, "Проблема с update", new Exception("ЮЮЮЮЮЮЮЮЮЮЮЮЮ"));
     }
 
     private void checkAnswer(boolean userPressTrue) {
@@ -109,7 +132,6 @@ public class QuizActivity extends AppCompatActivity {
         if (isAnswerTrue == userPressTrue) {
             messageResId = R.string.correct_answer;
             countOfRightAnswers++;
-//            Log.i("countOfRightAnswers", String.valueOf(countOfRightAnswers));
             nextQuestion();
         } else {
             messageResId = R.string.incorrect_answer;
@@ -168,7 +190,4 @@ public class QuizActivity extends AppCompatActivity {
         savedInstanceState.putInt("countOfAnswer", countOfAnswer);
     }
 
-    /**
-     * 89 стр
-     */
 }

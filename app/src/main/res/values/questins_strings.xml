@@ -12,11 +12,10 @@
     <string name="q_duma">Дюма был французким писателем?</string>
     <string name="q_riv">У Дона больше 20 притоков?</string>
 
-    <string name="sdk_v">Версия 10</string>
+    <string name="sdk_v">Версия SDK</string>
     <string name="sure">Вы уверены?</string>
     <string name="show_answer_button">Показать ответ</string>
     <string name="cheat_button">Подсказка</string>
     <string name="judgement_toast">Хватит подсматривать!</string>
     <string name="end_of_podskazok">Подсказки сгорели</string>
-
 </resources>

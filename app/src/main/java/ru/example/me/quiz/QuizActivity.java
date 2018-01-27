@@ -13,9 +13,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 /**
- * 127 стр
+ * 146 стр
  */
 public class QuizActivity extends AppCompatActivity {
 
@@ -49,10 +48,6 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(Bundle) called");
         if (savedInstanceState != null) {
-//            Log.d("onCreate", "mCurrentIndex " + String.valueOf(mCurrentIndex));
-//            Log.d("onCreate", "countOfRightAnswers " +String.valueOf(countOfRightAnswers));
-//            Log.d("onCreate","countOfAnswer " + String.valueOf(countOfAnswer));
-
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
             countOfRightAnswers = savedInstanceState.getInt("countOfRightAnswers", 0);
             countOfAnswer = savedInstanceState.getInt("countOfAnswer", 0);
@@ -60,6 +55,7 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+
         updateQuestion();
 
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {

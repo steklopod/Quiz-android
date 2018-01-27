@@ -15,6 +15,6 @@
     <string name="sure">Вы уверены?</string>
     <string name="show_answer_button">Показать ответ</string>
     <string name="cheat_button">Подсказка</string>
-    <string name="judgement_toast">Подсказка неправильная</string>
+    <string name="judgement_toast">Хватит подсматривать!</string>
     
 </resources>

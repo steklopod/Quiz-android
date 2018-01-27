@@ -1,5 +1,6 @@
 package ru.example.me.quiz;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,7 @@ import android.widget.Toast;
 
 
 /**
- * 124 стр
+ * 127 стр
  */
 public class QuizActivity extends AppCompatActivity {
 
@@ -23,8 +24,11 @@ public class QuizActivity extends AppCompatActivity {
     private ImageButton mPreviosButton;
     private TextView mQuestionTextView;
 
+    private boolean isPodskazka;
+
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final int REQUEST_CODE_CHEAT = 0;
     private static int countOfRightAnswers = 0;
     private int mCurrentIndex = 0;
     private int countOfAnswer = 0;
@@ -109,7 +113,8 @@ public class QuizActivity extends AppCompatActivity {
 //              startActivity(intent);
                 boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
                 Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
-                startActivity(intent);
+//                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_CHEAT);
             }
         });
     }
@@ -117,29 +122,35 @@ public class QuizActivity extends AppCompatActivity {
     private void nextQuestion() {
         mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
         countOfAnswer++;
+        isPodskazka = false;
         updateQuestion();
     }
 
     private void updateQuestion() {
         int question = mQuestions[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
+
 //        Log.d(TAG, "Проблема с update", new Exception("ЮЮЮЮЮЮЮЮЮЮЮЮЮ"));
     }
 
     private void checkAnswer(boolean userPressTrue) {
         boolean isAnswerTrue = mQuestions[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;
-        if (isAnswerTrue == userPressTrue) {
-            messageResId = R.string.correct_answer;
-            countOfRightAnswers++;
+        if (isPodskazka) {
+            messageResId = R.string.judgement_toast;
             nextQuestion();
         } else {
-            messageResId = R.string.incorrect_answer;
-            nextQuestion();
+            if (isAnswerTrue == userPressTrue) {
+                messageResId = R.string.correct_answer;
+                countOfRightAnswers++;
+                nextQuestion();
+            } else {
+                messageResId = R.string.incorrect_answer;
+                nextQuestion();
+            }
         }
         if (countOfAnswer == mQuestions.length) {
             int procentcOfRecognize = (int) (countOfRightAnswers * 100.0f / mQuestions.length);
-
             Toast.makeText(this, "Процент правильных ответов: " + procentcOfRecognize + "%",
                     Toast.LENGTH_SHORT).show();
             nextQuestion();
@@ -148,6 +159,7 @@ public class QuizActivity extends AppCompatActivity {
             countOfAnswer = 0;
             return;
         }
+
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 
@@ -190,4 +202,17 @@ public class QuizActivity extends AppCompatActivity {
         savedInstanceState.putInt("countOfAnswer", countOfAnswer);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_CODE_CHEAT) {
+            if (data == null) {
+                return;
+            }
+            isPodskazka = CheatActivity.wasAnswerShown(data);
+            Log.d(TAG, "isPodskazka = " + isPodskazka);
+        }
+    }
 }

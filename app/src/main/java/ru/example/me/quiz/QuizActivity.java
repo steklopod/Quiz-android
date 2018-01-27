@@ -2,7 +2,9 @@ package ru.example.me.quiz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -28,10 +30,12 @@ public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+
     private static final int REQUEST_CODE_CHEAT = 0;
     private static int countOfRightAnswers = 0;
-    private int mCurrentIndex = 0;
-    private int countOfAnswer = 0;
+    private static int countOfPodskazok = 0;
+    private static int mCurrentIndex = 0;
+    private static int countOfAnswer = 0;
 
     private Question[] mQuestions = new Question[]{
             new Question(R.string.q_afraid, false),
@@ -48,7 +52,6 @@ public class QuizActivity extends AppCompatActivity {
 //            Log.d("onCreate", "mCurrentIndex " + String.valueOf(mCurrentIndex));
 //            Log.d("onCreate", "countOfRightAnswers " +String.valueOf(countOfRightAnswers));
 //            Log.d("onCreate","countOfAnswer " + String.valueOf(countOfAnswer));
-
 
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
             countOfRightAnswers = savedInstanceState.getInt("countOfRightAnswers", 0);
@@ -68,6 +71,7 @@ public class QuizActivity extends AppCompatActivity {
 
         mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
                 checkAnswer(true);
@@ -76,6 +80,7 @@ public class QuizActivity extends AppCompatActivity {
 
         mFalseButton = (Button) findViewById(R.id.false_button);
         mFalseButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
                 checkAnswer(false);
@@ -129,15 +134,21 @@ public class QuizActivity extends AppCompatActivity {
     private void updateQuestion() {
         int question = mQuestions[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
-
 //        Log.d(TAG, "Проблема с update", new Exception("ЮЮЮЮЮЮЮЮЮЮЮЮЮ"));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void checkAnswer(boolean userPressTrue) {
         boolean isAnswerTrue = mQuestions[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;
         if (isPodskazka) {
-            messageResId = R.string.judgement_toast;
+            countOfPodskazok++;
+            if (countOfPodskazok > 2) {
+                CheatActivity.hideButton(mCheatButton);
+                messageResId = R.string.end_of_podskazok;
+            } else {
+                messageResId = R.string.judgement_toast;
+            }
             nextQuestion();
         } else {
             if (isAnswerTrue == userPressTrue) {
@@ -159,7 +170,6 @@ public class QuizActivity extends AppCompatActivity {
             countOfAnswer = 0;
             return;
         }
-
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 

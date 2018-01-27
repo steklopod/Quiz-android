@@ -5,23 +5,30 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context="ru.example.me.quiz.CheatActivity">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="24dp"
-        android:text="@string/sure"
-        />
+        android:text="@string/sure" />
+
     <TextView
         android:id="@+id/answer_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="24dp"
-        tools:text="Ответ"
-        />
+        tools:text="Ответ" />
+
     <Button
         android:id="@+id/show_answer_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/show_answer_button"
-        />
+        android:text="@string/show_answer_button" />
+
+    <TextView
+        android:id="@+id/sdk_vers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sdk_v"
+        tools:text="android.os.Build.VERSION" />
 </LinearLayout>
